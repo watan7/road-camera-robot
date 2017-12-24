@@ -34,7 +34,7 @@ def webhook():
 
 
 def processRequest(req):
-    if req.get("result").get("action") != "Road Camera Call":
+    if req.get("result").get("action") != "Road_Camera_Call":
         return {}
     baseurl = "https://api.transport.nsw.gov.au/v1/live/cameras"
     yql_query = makeYqlQuery(req)
