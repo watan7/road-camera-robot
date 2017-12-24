@@ -50,17 +50,17 @@ titles = []
 for index in data1:
     titles.append(index['properties']['title'])
     print(index['properties']['title'])
-index = titles.index(Camera_Title)    
+index = titles.index(camera_title)    
 
 
 def makeYqlQuery(req):
     result = req.get("result")
     parameters = result.get("parameters")
-    Camera_Title = parameters.get("Camera_Title")
-    if Camera_Title is None:
+    camera_title = parameters.get("camera_title")
+    if camera_title is None:
         return None
 
-    return Camera_Title
+    return camera_title
 
 
 def makeWebhookResult(data):
@@ -83,7 +83,7 @@ def makeWebhookResult(data):
 
     # print(json.dumps(item, indent=4))
 
-    speech = "Here is a photo of the traffic in" + Camera_Title + href
+    speech = "Here is a photo of the traffic in" + camera_title + href
 
     print("Response:")
     print(speech)
