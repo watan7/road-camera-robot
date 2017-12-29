@@ -24,7 +24,7 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
     
-    camera_title = camera_title(req)
+    camera_title = camera_title_generate(req)
     
     print("Request:")
     print(json.dumps(req, indent=4))
@@ -38,7 +38,7 @@ def webhook():
     return r
 
 #returns title name of camera
-def camera_title(req):
+def camera_title_generate(req):
     if req.get("result").get("action") != "Road_Camera_Call":
         return {}
 
