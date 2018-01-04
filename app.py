@@ -34,7 +34,10 @@ def webhook():
     elif req.get("originalRequest").get("source") == "facebook":
     	coordinates = req.get("originalRequest").get("data").get("data")
         res = coordinates
-        
+    
+    else:
+    	res = "nothing was returned"
+    
     # print(res)
     r = make_response(res)
     r.headers['Content-Type'] = 'application/json'
