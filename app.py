@@ -32,7 +32,7 @@ def webhook():
         res = json.dumps(res, indent=4)
     
     elif req.get("originalRequest").get("source") == "facebook":
-    	coordinates = req.get("originalRequest").get("source").get("data")
+    	coordinates = req.get("originalRequest").get("data").get("data")
         res = coordinates
         
     # print(res)
