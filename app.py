@@ -24,7 +24,7 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
     
-    camera_title = print("hey")
+    camera_title = camera_title_generate(req)
     print("Request:")
     print(json.dumps(req, indent=4))
     res = processRequest(req, camera_title)    
