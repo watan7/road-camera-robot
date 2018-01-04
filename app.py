@@ -24,19 +24,19 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
     
-    if req.get("result").get("action") != "Road_Camera_Call":
-        camera_title = camera_title_generate(req)
+    if req.get("result").get("action") == "Road_Camera_Cal":
+        camera_title = print("hey")
         print("Request:")
         print(json.dumps(req, indent=4))
         res = processRequest(req, camera_title)    
         res = json.dumps(res, indent=4)
     
-    elif req.get("originalRequest").get("source") == "facebook":
-    	coordinates = req.get("originalRequest").get("data").get("data")
+    elif (req.get("originalRequest") != None):
+        coordinates = req.get("originalRequest").get("data").get("data")
         res = coordinates
-    
+ 
     else:
-    	res = "nothing was returned"
+        res = "nothing was returned"
     
     # print(res)
     r = make_response(res)
