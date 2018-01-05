@@ -109,7 +109,7 @@ def makeWebhookResult(data, camera_title):
 #Creates JSON from Coord_API
 def use_stopFinder_API(location_data):
     #Process coordinates data
-    coord = '{0:01.6f}:{1:01.6f}:EPSG:4326'.format(coordinates["long"], coordinates["lat"])
+    coord = '{0:01.6f}:{1:01.6f}:EPSG:4326'.format(location_data["long"], location_data["lat"])
     radius = 1000
 
     api_Endpoint = 'https://api.transport.nsw.gov.au/v1/tp/'
