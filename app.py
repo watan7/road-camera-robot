@@ -33,8 +33,8 @@ def webhook():
     
     elif (req.get("originalRequest").get("payload") == "FACEBOOK_LOCATION"):
         coordinates = req.get("originalRequest").get("data").get("postback").get("data")
-        data use_stopFinder_API(coordinates)       
-        res = makeWebhookResult_stopFinder(data)
+        user_coordinates = use_stopFinder_API(coordinates)       
+        res = makeWebhookResult_stopFinder(user_coordinates)
         res = json.dumps(res, indent=4)
         
     else:
