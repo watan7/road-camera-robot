@@ -24,7 +24,7 @@ app = Flask(__name__)
 def webhook():
     req = request.get_json(silent=True, force=True)
     
-    if req.get("result").get("action") == "Road_Camera_Cal":
+    if req.get("result").get("action") == "Road_Camera_Call":
         camera_title = print("hey")
         print("Request:")
         print(json.dumps(req, indent=4))
