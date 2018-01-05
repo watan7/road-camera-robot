@@ -39,6 +39,7 @@ def webhook():
         
     else:
         res = "nothing was returned "
+        res = json.dumps(res, indent=4)
     
     # print(res)
     r = make_response(res)
