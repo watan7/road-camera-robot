@@ -31,10 +31,11 @@ def webhook():
         res = processRequest(req, camera_title)    
         res = json.dumps(res, indent=4)
     
-    elif (req.get("originalRequest") != None):
-        coordinates = req.get("originalRequest").get("data").get("data")
-        res = coordinates
- 
+    elif (req.get("originalRequest").get("payload") == "FACEBOOK_LOCATION"):
+        coordinates = req.get("originalRequest").get("data").get("postback").get("data")
+        res = makeWebhookResult_stopFinder(data)
+        res = json.dumps(res, indent=4)
+        
     else:
         res = "nothing was returned"
     
@@ -97,6 +98,64 @@ def makeWebhookResult(data, camera_title):
 
     return {
         "speech": speech + camera_title + href, 
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "Road_Camera_Robot"
+    }
+
+#Creates JSON from Coord_API
+def use_stopFinder_API(location_data):
+    #Process coordinates data
+    coord = '{0:01.6f}:{1:01.6f}:EPSG:4326'.format(coordinates["long"], coordinates["lat"])
+    radius = 1000
+
+    api_Endpoint = 'https://api.transport.nsw.gov.au/v1/tp/'
+    api_Call = 'coord'
+    api_Parameters = {
+        "outputFormat": "rapidJSON",
+        "coord": coord,
+        "coordOutputFormat": "EPSG:4326",
+        "inclFilter": 1,
+        "type_1": "GIS_POINT",
+        "radius_1": radius,
+        "PoisOnMapMacro": "true",
+        "version": "10.2.1.42",
+        "inclDrawClasses_1": 74,
+        }
+
+    baseurl = api_Endpoint + api_Call + "?"
+    response = requests.get(baseurl, params=api_Parameters, headers={'Authorization': 'apikey pYIdffDyBMqdtActEnbbBcajSC3gEBdTkAtx'})
+    data = response.json()
+    
+    return data
+
+def makeWebhookResult_stopFinder(data):
+    
+    data1 = data["locations"]
+    names = []
+    lat = []
+    long = []
+    distance = []
+
+    for index in data1:
+        names.append(index["name"])
+        lat.append(index["coord"][0])
+        long.append(index["coord"][1])
+        distance.append(index["properties"]["distance"])
+        
+        speech = []
+        speech_google_maps = []
+        
+    for i in range(len(names)):
+        speech.append("{}: {} is {}m away - https://www.google.com/maps/search/?api=1&query={},{}".format(i + 1, names[i], distance[i], lat[i], long[i]))
+
+# print(json.dumps(item, indent=4))
+    print("Response:")
+    print(speech)
+
+    return {
+        "speech": speech, 
         "displayText": speech,
         # "data": data,
         # "contextOut": [],
