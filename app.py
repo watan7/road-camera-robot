@@ -146,7 +146,7 @@ def makeWebhookResult_stopFinder(data):
         long.append(index["coord"][1])
         distance.append(index["properties"]["distance"])
         
-        speech = []
+        speech1 = []
         
     for i in range(len(names)):
         speech.append("{}: {} is {}m away - https://www.google.com/maps/search/?api=1&query={},{}".format(i + 1, names[i], distance[i], lat[i], long[i]))
@@ -154,11 +154,11 @@ def makeWebhookResult_stopFinder(data):
         
 # print(json.dumps(item, indent=4))
     print("Response:")
-    print(speech)
+    print(speech1)
 
     return {
-        "speech": speech, 
-        "displayText": speech,
+        "speech": speech1, 
+        "displayText": speech1,
         # "data": data,
         # "contextOut": [],
         "source": "Road_Camera_Robot"
