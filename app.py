@@ -25,12 +25,12 @@ def webhook():
     req = request.get_json(silent=True, force=True)
     
     if req.get("result").get("action") == "Road_Camera_Call":
-        camera_title = print("hey")
+        camera_title = camera_title_generate(req)
         print("Request:")
         print(json.dumps(req, indent=4))
         res = processRequest(req, camera_title)    
         res = json.dumps(res, indent=4)
-    
+
     elif req.get("originalRequest").get("data").get("postback").get("payload") == "FACEBOOK_LOCATION":
         coordinates = req.get("originalRequest").get("data").get("postback").get("data")
         user_coordinates = use_stopFinder_API(coordinates)       
