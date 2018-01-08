@@ -133,7 +133,6 @@ def use_stopFinder_API(location_data):
     return data
 
 def makeWebhookResult_stopFinder(data):
-
     
     data1 = data["locations"]
     names = []
@@ -141,30 +140,25 @@ def makeWebhookResult_stopFinder(data):
     long = []
     distance = []
 
-    for index in data1[:5]:
+    for index in data1:
         names.append(index["name"])
         lat.append(index["coord"][0])
         long.append(index["coord"][1])
         distance.append(index["properties"]["distance"])
         
         speech = []
-
         
     for i in range(len(names)):
-        speech.append("{} is {}m away - https://www.google.com/maps/search/?api=1&query={},{}".format(names[i], distance[i], lat[i], long[i]))
-
-# print(json.dumps(item, indent=4))
-    speech_1 = {}
-    for k in range(len(speech)):  
-        speech_1[k] = speech[k]
-     
-
+        speech.append("{}: {} is {}m away - https://www.google.com/maps/search/?api=1&query={},{}".format(i + 1, names[i], distance[i], lat[i], long[i]))
+    
+    speech = ' '.join(speech)
+        
     return {
-        "speech": speech_1, 
-        "displayText": speech_1,
+        "speech": speech, 
+        "displayText": speech,
         # "data": data,
         # "contextOut": [],
-        "source": "Road_Camera_Robot"
+        "source": "Road_Camera_Robot",
     }
 
 
