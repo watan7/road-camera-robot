@@ -99,7 +99,7 @@ def makeWebhookResult(data, camera_title):
     print(speech, camera_title, href)
 
     return {
-        "speech": speech + camera_title + href, 
+        "speech": speech, 
         "displayText": speech,
         "data": {
           "facebook": {
