@@ -107,11 +107,11 @@ def makeWebhookResult(data, camera_title):
                 "type": "image",
                 "payload": {
                     "url": href,
+              }
+            }
           }
-        }
-      }
-    },
-    "score": 1                  
+        },
+        "score": 1,                  
         # "contextOut": [],
         "source": "Road_Camera_Robot"
     }
