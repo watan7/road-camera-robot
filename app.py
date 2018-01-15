@@ -150,7 +150,7 @@ def makeWebhookResult_stopFinder(data):
     long = []
     distance = []
 
-    for index in data1:
+    for index in data1[:5]:
         names.append(index["name"])
         lat.append(index["coord"][0])
         long.append(index["coord"][1])
