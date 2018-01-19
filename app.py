@@ -31,7 +31,7 @@ def webhook():
         res = processRequest(req, camera_title)    
         res = json.dumps(res, indent=4)
 
-    elif req.get("originalRequest").get("data").get("postback").get("payload") == "FACEBOOK_LOCATION":
+    elif req.get("result").get("action") == "Opal_Reseller":
         coordinates = req.get("originalRequest").get("data").get("postback").get("data")
         user_coordinates = use_stopFinder_API(coordinates)       
         res = makeWebhookResult_stopFinder(user_coordinates)
