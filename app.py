@@ -10,7 +10,14 @@ from urllib.error import HTTPError
 
 import json
 import os
-import requests 
+import requests
+import datetime
+
+from time import gmtime, strftime, localtime
+from datetime import datetime, timedelta
+from pytz import timezone
+import pytz
+
 
 from flask import Flask
 from flask import request
@@ -36,7 +43,17 @@ def webhook():
         user_coordinates = use_stopFinder_API(coordinates)       
         res = makeWebhookResult_stopFinder(user_coordinates)
         res = json.dumps(res, indent=4)
-        
+       
+    elif req.get("result").get("action") == "Train_Trip_Request":
+        search_query_departure_station = req.get("result").get("parameters").get("Train_stations_departure")
+        search_query_arrival_station = req.get("result").get("parameters").get("Train_stations_arrival")
+
+        stop_id_departure = find_stop_id(search_query_arrival_station, search_query_departure_station, "departure_station")
+        stop_id_arrival = find_stop_id(search_query_arrival_station, search_query_departure_station, "arrival_station")
+
+        train_trips = trip_planner(stop_id_arrival, stop_id_departure)
+        res = makeWebhookResult_trainTrip(train_trips)
+       
     else:
         res = "nothing was returned "
         res = json.dumps(res, indent=4)
@@ -173,6 +190,131 @@ def makeWebhookResult_stopFinder(data):
         "source": "Road_Camera_Robot",
     }
 
+#Stop Finder API
+def find_stop_id(search_query_arrival_station, search_query_departure_station, a):
+
+    if a == "arrival_station":
+        search_query = search_query_arrival_station
+    elif a == "departure_station":
+        search_query = search_query_departure_station
+    else:
+        return {}
+    
+    api_Endpoint = "https://api.transport.nsw.gov.au/v1/tp/"
+    api_Call = "stop_finder"
+    api_Parameters = {
+        "outputFormat": "rapidJSON",
+        "type_sf": "any",
+        "name_sf": search_query,
+        "coordOutputFormat": 'EPSG%3A4326',
+        "TfNSWSF": "true",
+        "version": "10.2.1.42"
+    }
+
+    baseurl = api_Endpoint + api_Call + "?"
+    response = requests.get(baseurl, params=api_Parameters, headers={'Authorization': 'apikey pYIdffDyBMqdtActEnbbBcajSC3gEBdTkAtx'})
+    
+    data = response.json()
+    data = data['locations']
+
+    isBest = []
+    for index in data:
+        isBest.append(index['isBest'])
+
+    index = isBest.index(True)
+
+    stop_id = data[index].get('id')
+    
+    return stop_id
+
+#Trip Planner API
+def trip_planner(arrival_station_id, departure_station_id):
+    api_Endpoint = "https://api.transport.nsw.gov.au/v1/tp/"
+    api_Call = "trip"
+
+    #Input Parameters for search
+    when_time = strftime("%H%M", localtime())
+    when_date = datetime.now().strftime ("%Y%m%d")
+    origin = departure_station_id
+    destination = arrival_station_id
+
+    api_Parameters = {
+        "outputFormat": "rapidJSON",
+        "coordOutputFormat": "EPSG:4326",
+        "depArrMacro": "dep",
+        "itdDate": datetime.now().strftime ("%Y%m%d"),
+        "itdTime": strftime("%H%M", localtime()),
+        "type_origin": "stop",
+        "name_origin": origin,
+        "type_destination": "stop",
+        "name_destination": destination,
+        "calcNumberOfTrips": 3,
+        "TfNSWSF": "true",
+        "version": "10.2.1.42"
+    }
+
+    baseurl = api_Endpoint + api_Call + "?"
+    response = requests.get(baseurl, params=api_Parameters, headers={'Authorization': 'apikey pYIdffDyBMqdtActEnbbBcajSC3gEBdTkAtx'})
+    data = response.json()
+    
+    data_journeys = data.get("journeys")
+    
+    data_legs = []
+    for index in data_journeys:
+        data_legs.append(index['legs'][0])
+
+    data_origin = []
+    for index in data_legs:
+        data_origin.append(index['origin'])
+
+    data_departureTimePlanned = []
+    for index in data_origin:
+        data_departureTimePlanned.append(convert_time(index['departureTimeEstimated']))
+
+    data_destination = []
+    for index in data_legs:
+        data_destination.append(index['destination'])
+
+    data_arrivalTimePlanned = []
+    for index in data_destination:
+        data_arrivalTimePlanned.append(convert_time(index['arrivalTimeEstimated']))
+    
+       
+    return data_departureTimePlanned, data_arrivalTimePlanned
+
+##Convert Time function
+def convert_time(dtp):
+    utc = pytz.utc
+    fmt = '%Y-%m-%d %H:%M'
+    year = int(dtp[0:4])
+    month = int(dtp[5:7])
+    day = int(dtp[8:10])
+    hour = int(dtp[11:13])
+    minute = int(dtp[14:16])
+    utc_dt = utc.localize(datetime(year, month, day, hour, minute, 0))
+    au_tz = timezone('Australia/Sydney')
+    au_dt = utc_dt.astimezone(au_tz)
+    string = au_dt.strftime(fmt)
+    return string
+
+def makeWebhookResult_trainTrip(train_trips):
+    speech = []
+    
+    search_query_departure_station = req.get("result").get("parameters").get("Train_stations_departure")
+    search_query_arrival_station = req.get("result").get("parameters").get("Train_stations_arrival")
+    
+    for i in range(len(train_trips[0])):
+        speech.append("{}: Departs {} at {} and arrives {} at {}".format(i + 1, search_query_arrival_station, train_trips[0][i], search_query_arrival_station, train_trips[1][i]))
+    
+    speech = ''.join(speech)
+    
+    return {
+        "speech": speech, 
+        "displayText": speech,
+        # "data": data,
+        # "contextOut": [],
+        "source": "Road_Camera_Robot"
+    }
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
