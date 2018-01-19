@@ -53,6 +53,7 @@ def webhook():
 
         train_trips = trip_planner(stop_id_arrival, stop_id_departure)
         res = makeWebhookResult_trainTrip(train_trips)
+        res = json.dumps(res, indent=4)
        
     else:
         res = "nothing was returned "
