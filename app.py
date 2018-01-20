@@ -35,13 +35,13 @@ def webhook():
         res = processRequest(req, camera_title)    
         res = json.dumps(res, indent=4)
 
-    elif req.get("result").get("action") == "Opal_Reseller":
+    elif (req.get("result").get("action") == "Opal_Reseller"):
         coordinates = req.get("originalRequest").get("data").get("postback").get("data")
         user_coordinates = use_stopFinder_API(coordinates)       
         res = makeWebhookResult_stopFinder(user_coordinates)
         res = json.dumps(res, indent=4)
        
-    elif req.get("result").get("action") == "Train_Trip_Request":
+    elif (req.get("result").get("action") == "Train_Trip_Request"):
         search_query_departure_station_1 = req.get("result").get("parameters").get("Train_stations_departure")
         search_query_arrival_station_1 = req.get("result").get("parameters").get("Train_stations_arrival")
 
