@@ -11,7 +11,6 @@ from urllib.error import HTTPError
 import json
 import os
 import requests
-import datetime
 
 from datetime import datetime, timedelta
 from pytz import timezone
