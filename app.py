@@ -13,11 +13,9 @@ import os
 import requests
 import datetime
 
-from time import gmtime, strftime, localtime
 from datetime import datetime, timedelta
 from pytz import timezone
 import pytz
-
 
 from flask import Flask
 from flask import request
@@ -234,6 +232,8 @@ def trip_planner(arrival_station_id, departure_station_id):
     api_Call = "trip"
 
     #Input Parameters for search
+    when_time = datetime.now().strftime("%H%M")
+    when_date = datetime.now().strftime ("%Y%m%d")
     origin = departure_station_id
     destination = arrival_station_id
 
@@ -280,6 +280,7 @@ def trip_planner(arrival_station_id, departure_station_id):
     
        
     return data_departureTimePlanned, data_arrivalTimePlanned
+
 
 ##Convert Time function
 def convert_time(dtp):
