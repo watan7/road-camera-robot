@@ -297,6 +297,9 @@ def convert_time(dtp):
     return string
 
 def makeWebhookResult_trainTrip(train_trips):
+    search_query_departure_station_1 = req.get("result").get("parameters").get("Train_stations_departure")
+    search_query_arrival_station_1 = req.get("result").get("parameters").get("Train_stations_arrival")
+    
     speech = []
        
     for i in range(len(train_trips[0])):
