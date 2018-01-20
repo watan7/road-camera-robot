@@ -15,6 +15,7 @@ import requests
 from datetime import datetime, timedelta
 from pytz import timezone
 import pytz
+import logging
 
 from flask import Flask
 from flask import request
@@ -311,6 +312,11 @@ def makeWebhookResult_trainTrip(train_trips):
         # "contextOut": [],
         "source": "Road_Camera_Robot"
     }
+
+
+
+app.logger.addHandler(logging.StreamHandler(sys.stdout))
+app.logger.setLevel(logging.ERROR)
 
 if __name__ == '__main__':
     port = int(os.getenv('PORT', 5000))
