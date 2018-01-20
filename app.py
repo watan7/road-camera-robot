@@ -15,7 +15,6 @@ import requests
 from datetime import datetime, timedelta
 from pytz import timezone
 import pytz
-import logging
 
 from flask import Flask
 from flask import request
