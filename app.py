@@ -36,6 +36,7 @@ def webhook():
         res = json.dumps(res, indent=4)
 
     elif (req.get("result").get("action") == "Train_Trip_Request"):
+        req = request.get_json(silent=True, force=True)
         search_query_departure_station_1 = req.get("result").get("parameters").get("Train_stations_departure")
         search_query_arrival_station_1 = req.get("result").get("parameters").get("Train_stations_arrival")
         stop_id_departure_1 = find_stop_id(search_query_arrival_station_1, search_query_departure_station_1, "departure_station")
