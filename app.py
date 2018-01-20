@@ -234,8 +234,6 @@ def trip_planner(arrival_station_id, departure_station_id):
     api_Call = "trip"
 
     #Input Parameters for search
-    when_time = strftime("%H%M", localtime())
-    when_date = datetime.now().strftime ("%Y%m%d")
     origin = departure_station_id
     destination = arrival_station_id
 
@@ -244,7 +242,7 @@ def trip_planner(arrival_station_id, departure_station_id):
         "coordOutputFormat": "EPSG:4326",
         "depArrMacro": "dep",
         "itdDate": datetime.now().strftime ("%Y%m%d"),
-        "itdTime": strftime("%H%M", localtime()),
+        "itdTime": datetime.now().strftime("%H%M"),
         "type_origin": "stop",
         "name_origin": origin,
         "type_destination": "stop",
