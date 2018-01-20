@@ -36,13 +36,12 @@ def webhook():
         res = json.dumps(res, indent=4)
 
     elif (req.get("result").get("action") == "Train_Trip_Request"):
-        req = request.get_json(silent=True, force=True)
         search_query_departure_station_1 = req.get("result").get("parameters").get("Train_stations_departure")
         search_query_arrival_station_1 = req.get("result").get("parameters").get("Train_stations_arrival")
         stop_id_departure_1 = find_stop_id(search_query_arrival_station_1, search_query_departure_station_1, "departure_station")
         stop_id_arrival_1 = find_stop_id(search_query_arrival_station_1, search_query_departure_station_1, "arrival_station")
         train_trips_1 = trip_planner(stop_id_arrival_1, stop_id_departure_1)
-        res = makeWebhookResult_trainTrip(train_trips_1)
+        res = makeWebhookResult_trainTrip(train_trips_1, search_query_arrival_station_1, search_query_departure_station_1)
         res = json.dumps(res, indent=4)        
         
     elif (req.get("result").get("action") == "Opal_Reseller"):
@@ -295,14 +294,12 @@ def convert_time(dtp):
     string = au_dt.strftime(fmt)
     return string
 
-def makeWebhookResult_trainTrip(train_trips):
-    search_query_departure_station_1 = req.get("result").get("parameters").get("Train_stations_departure")
-    search_query_arrival_station_1 = req.get("result").get("parameters").get("Train_stations_arrival")
+def makeWebhookResult_trainTrip(train_trips, search_query_arrival_station, search_query_departure_station):
     
     speech = []
        
     for i in range(len(train_trips[0])):
-        speech.append("{}: Departs {} at {} and arrives {} at {}".format(i + 1, search_query_arrival_station_1, train_trips[0][i], search_query_departure_station_1, train_trips[1][i]))
+        speech.append("{}: Departs {} at {} and arrives {} at {}".format(i + 1, search_query_arrival_station, train_trips[0][i], search_query_departure_station, train_trips[1][i]))
     
     speech = ''.join(speech)
     
