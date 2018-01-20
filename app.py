@@ -45,11 +45,11 @@ def webhook():
         search_query_departure_station = req.get("result").get("parameters").get("Train_stations_departure")
         search_query_arrival_station = req.get("result").get("parameters").get("Train_stations_arrival")
 
-        stop_id_departure = find_stop_id(search_query_arrival_station, search_query_departure_station, "departure_station")
-        stop_id_arrival = find_stop_id(search_query_arrival_station, search_query_departure_station, "arrival_station")
+        stop_id_departure_1 = find_stop_id(search_query_arrival_station, search_query_departure_station, "departure_station")
+        stop_id_arrival_1 = find_stop_id(search_query_arrival_station, search_query_departure_station, "arrival_station")
 
-        train_trips = trip_planner(stop_id_arrival, stop_id_departure)
-        res = makeWebhookResult_trainTrip(train_trips)
+        train_trips_1 = trip_planner(stop_id_arrival_1, stop_id_departure_1)
+        res = makeWebhookResult_trainTrip(train_trips_1)
         res = json.dumps(res, indent=4)
        
     else:
