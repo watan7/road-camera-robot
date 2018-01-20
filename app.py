@@ -35,12 +35,6 @@ def webhook():
         res = processRequest(req, camera_title)    
         res = json.dumps(res, indent=4)
 
-    elif (req.get("result").get("action") == "Opal_Reseller"):
-        coordinates = req.get("originalRequest").get("data").get("postback").get("data")
-        user_coordinates = use_stopFinder_API(coordinates)       
-        res = makeWebhookResult_stopFinder(user_coordinates)
-        res = json.dumps(res, indent=4)
-       
     elif (req.get("result").get("action") == "Train_Trip_Request"):
         search_query_departure_station_1 = req.get("result").get("parameters").get("Train_stations_departure")
         search_query_arrival_station_1 = req.get("result").get("parameters").get("Train_stations_arrival")
@@ -48,8 +42,14 @@ def webhook():
         stop_id_arrival_1 = find_stop_id(search_query_arrival_station_1, search_query_departure_station_1, "arrival_station")
         train_trips_1 = trip_planner(stop_id_arrival_1, stop_id_departure_1)
         res = makeWebhookResult_trainTrip(train_trips_1)
+        res = json.dumps(res, indent=4)        
+        
+    elif (req.get("result").get("action") == "Opal_Reseller"):
+        coordinates = req.get("originalRequest").get("data").get("postback").get("data")
+        user_coordinates = use_stopFinder_API(coordinates)       
+        res = makeWebhookResult_stopFinder(user_coordinates)
         res = json.dumps(res, indent=4)
-       
+             
     else:
         res = "nothing was returned "
         res = json.dumps(res, indent=4)
