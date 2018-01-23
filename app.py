@@ -282,7 +282,7 @@ def trip_planner(arrival_station_id, departure_station_id):
 ##Convert Time function
 def convert_time(dtp):
     utc = pytz.utc
-    fmt = '%Y-%m-%d %H:%M'
+    fmt = '%H:%M'
     year = int(dtp[0:4])
     month = int(dtp[5:7])
     day = int(dtp[8:10])
@@ -296,14 +296,15 @@ def convert_time(dtp):
 
 def makeWebhookResult_trainTrip(train_trips, search_query_arrival_station, search_query_departure_station):
     
-    speech = [search_query_arrival_station, search_query_departure_station]
-       
-    for i in range(len(train_trips[0])):
-        speech.append("{}: Departs {} and arrives {}\
+    speech = ["Trains departing ", search_query_arrival_station_1.strip().split(",")[0], " and arriving at ", search_query_departure_station_1.strip().split(",")[0]]
+
+    for i in range(len(train_trips_1[0])):
+        speech.append("\
+        {}: Departs {} and arrives {}\
         \
         \
-        ".format(i + 1, train_trips[0][i], train_trips[1][i]))
-    
+        ".format(i + 1, train_trips_1[0][i], train_trips_1[1][i]))
+
     speech = ''.join(speech)
     
     return {
