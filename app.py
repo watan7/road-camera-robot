@@ -296,7 +296,7 @@ def convert_time(dtp):
 
 def makeWebhookResult_trainTrip(train_trips, search_query_arrival_station, search_query_departure_station):
     
-    speech = [search_query_arrival_station_1, search_query_departure_station_1]
+    speech = [search_query_arrival_station, search_query_departure_station]
        
     for i in range(len(train_trips[0])):
         speech.append("{}: Departs {} and arrives {}\
