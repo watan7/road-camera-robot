@@ -303,7 +303,7 @@ def makeWebhookResult_trainTrip(train_trips, search_query_arrival_station, searc
         {}: Departs {} and arrives {}\
         \
         \
-        ".format(i + 1, train_trips_1[0][i], train_trips_1[1][i]))
+        ".format(i + 1, train_trips[0][i], train_trips[1][i]))
 
     speech = ''.join(speech)
     
