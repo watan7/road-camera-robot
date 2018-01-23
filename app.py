@@ -301,8 +301,6 @@ def makeWebhookResult_trainTrip(train_trips, search_query_arrival_station, searc
     for i in range(len(train_trips[0])):
         speech.append("\
         {}: Departs {} and arrives {}\
-        \
-        \
         ".format(i + 1, train_trips[0][i], train_trips[1][i]))
 
     speech = ''.join(speech)
